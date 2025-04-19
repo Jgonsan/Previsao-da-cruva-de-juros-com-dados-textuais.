@@ -1,0 +1,66 @@
+📘 README — Fluctuation Test para Modelos de Previsão da Estrutura a Termo
+🔍 Objetivo
+Este script realiza testes de flutuação (Murphy Diagrams) para comparar o desempenho preditivo de diferentes modelos aplicados à previsão da estrutura a termo da taxa de juros no Brasil, com horizonte de 1 mês. O teste compara o modelo benchmark (Random Walk) com:
+
+Modelos sem dados textuais (only)
+
+Modelos com tom das atas do Copom
+
+(Outros modelos podem ser incluídos de forma análoga: tom do FOMC, polaridade, etc.)
+
+📁 Estrutura dos Dados
+O script usa os arquivos:
+
+erros_selecionados_h1.csv: contém os erros de previsão para o horizonte de 1 mês.
+
+erros_selecionados_h12.csv: (carregado, mas ainda não utilizado no script atual)
+
+Esses arquivos devem conter colunas com os erros dos modelos, organizados por maturidade e por tipo de modelo, como rw_M1, only_M1, tone_copom_M1, etc.
+
+🧰 Bibliotecas Utilizadas
+r
+Copiar
+Editar
+library(murphydiagram)
+library(readr)
+library(patchwork)
+library(ggplot2)
+library(zoo)
+library(lubridate)
+🛠️ Etapas do Código
+Leitura dos dados de erro de previsão.
+
+Criação de vetores de datas para rotular o eixo temporal dos gráficos.
+
+Separação dos vetores de erro por modelo e maturidade.
+
+Aplicação do teste de flutuação (fluctuation_test) comparando modelos com o Random Walk (benchmark).
+
+Visualização dos resultados com ggplot2, incluindo a linha de referência (critical value).
+
+Exportação dos gráficos usando ggsave.
+
+📊 Modelos Comparados
+Cada modelo é avaliado em diferentes maturidades da curva (3M, 12M, 36M, 60M). Os testes geram um gráfico por modelo/maturidade com a estatística de flutuação ao longo do tempo.
+
+Exemplo de gráficos gerados:
+
+"Horizonte: 1 mês | Maturidade: 3M"
+
+"Horizonte: 1 mês | Maturidade: 12M"
+
+etc.
+
+📁 Saída
+O script gera um arquivo .png com os gráficos combinados dos testes realizados:
+
+Sem dados textuais H1.png
+
+(Outros arquivos de saída podem ser gerados para diferentes conjuntos de modelos)
+
+✍️ Observações
+A função fluctuation_test() exige a definição de mu, nível de confiança (conf_level), e time_labels.
+
+O parâmetro dmv_fullsample = TRUE considera todo o período amostral para o cálculo da estatística.
+
+O código pode ser facilmente adaptado para outros conjuntos de modelos (ex: tone_fomc, polaridade_copom, etc.) replicando os blocos de teste.
